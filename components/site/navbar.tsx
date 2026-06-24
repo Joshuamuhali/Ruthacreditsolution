@@ -26,11 +26,7 @@ export function Navbar() {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'border-b border-border bg-background/85 backdrop-blur-md'
-          : 'border-b border-transparent bg-transparent'
-      } ${scrolled ? '' : 'text-white'}`}
+      className={`fixed inset-x-0 top-0 z-50 border-b border-border bg-background/85 backdrop-blur-md transition-all duration-300`}
     >
        <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8">
         <a href="#home" aria-label="Rutha Credit Solutions home" className="flex items-center overflow-hidden">
@@ -42,7 +38,7 @@ export function Navbar() {
             <a
               key={link.href}
               href={link.href}
-              className={`text-sm font-medium transition-colors hover:text-brand ${scrolled ? 'text-foreground/80' : 'text-white/80'}`}
+              className="text-sm font-medium text-foreground/80 transition-colors hover:text-brand"
             >
               {link.label}
             </a>
@@ -63,7 +59,7 @@ export function Navbar() {
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-label="Toggle menu"
-          className={`inline-flex h-10 w-10 items-center justify-center rounded-lg md:hidden ${scrolled ? 'text-foreground' : 'text-white'}`}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-foreground md:hidden"
         >
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
