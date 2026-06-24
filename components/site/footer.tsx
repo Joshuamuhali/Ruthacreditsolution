@@ -54,6 +54,15 @@ export function Footer() {
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-brand" />
                 <a
+                  href="mailto:customer@ruthcredit.com"
+                  className="hover:text-brand"
+                >
+                  customer@ruthcredit.com
+                </a>
+              </li>
+              <li className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-brand" />
+                <a
                   href="mailto:kashempa@rutharcredit.com"
                   className="hover:text-brand"
                 >
@@ -70,6 +79,7 @@ export function Footer() {
             reserved.
           </p>
           <p>Built on integrity, transparency and client satisfaction.</p>
+          <p>Designed by Joshua Muhali</p>
         </div>
       </div>
     </footer>
