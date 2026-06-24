@@ -1,12 +1,13 @@
 'use client'
 
 import { RevealGroup, RevealItem } from './reveal'
+import { CountUp } from './count-up'
 
 const stats = [
-  { value: '24h', label: 'Average approval time' },
-  { value: '100%', label: 'Confidential handling' },
-  { value: '2', label: 'Tailored loan products' },
-  { value: '3+', label: 'Cities served in Zambia' },
+  { end: 24, suffix: 'h', label: 'Average approval time' },
+  { end: 100, suffix: '%', label: 'Confidential handling' },
+  { end: 2, suffix: '', label: 'Tailored loan products' },
+  { end: 3, suffix: '+', label: 'Cities served in Zambia' },
 ]
 
 export function Stats() {
@@ -16,7 +17,7 @@ export function Stats() {
         {stats.map((s) => (
           <RevealItem key={s.label} className="text-center">
             <p className="font-heading text-4xl font-extrabold text-brand-foreground lg:text-5xl">
-              {s.value}
+              <CountUp end={s.end} suffix={s.suffix} />
             </p>
             <p className="mt-2 text-sm font-medium text-brand-foreground/80">
               {s.label}

@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Phone, Mail, ArrowRight } from 'lucide-react'
+import { Phone, Mail, ArrowRight, MapPin } from 'lucide-react'
 import { Reveal } from './reveal'
 
 const channels = [
@@ -14,8 +14,14 @@ const channels = [
   {
     icon: Mail,
     label: 'Email us',
-    lines: ['kashempa@rutharcredit.com'],
+    lines: ['kashempa@rutharcredit.com', 'customer@ruthcredit.com'],
     href: 'mailto:kashempa@rutharcredit.com',
+  },
+  {
+    icon: MapPin,
+    label: 'Visit us',
+    lines: ['Lusaka, Zambia'],
+    href: '#',
   },
 ]
 

@@ -47,17 +47,20 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-brand" />
-                <a href="tel:+260773162468" className="hover:text-brand">
-                  +260 773 162468
+                <a href="tel:+260977408230" className="hover:text-brand">
+                  +260 977 408230
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-brand" />
-                <a
-                  href="mailto:customer@ruthcredit.com"
-                  className="hover:text-brand"
-                >
-                  customer@ruthcredit.com
+                <Phone className="h-4 w-4 text-brand" />
+                <a href="tel:+260966408230" className="hover:text-brand">
+                  +260 966 408230
+                </a>
+              </li>
+              <li className="flex items-center gap-2">
+                <Phone className="h-4 w-4 text-brand" />
+                <a href="tel:+260773162468" className="hover:text-brand">
+                  +260 773 162468
                 </a>
               </li>
               <li className="flex items-center gap-2">
@@ -67,6 +70,15 @@ export function Footer() {
                   className="hover:text-brand"
                 >
                   kashempa@rutharcredit.com
+                </a>
+              </li>
+              <li className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-brand" />
+                <a
+                  href="mailto:customer@ruthcredit.com"
+                  className="hover:text-brand"
+                >
+                  customer@ruthcredit.com
                 </a>
               </li>
             </ul>
