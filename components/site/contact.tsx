@@ -14,7 +14,7 @@ const channels = [
   {
     icon: Mail,
     label: 'Email us',
-    lines: ['kashempa@rutharcredit.com', 'customer@ruthcredit.com'],
+    lines: ['kashempa@rutharcredit.com', 'customer@ruthacredit.com'],
     href: 'mailto:kashempa@rutharcredit.com',
   },
   {
