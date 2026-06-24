@@ -30,7 +30,7 @@ export function Navbar() {
         scrolled
           ? 'border-b border-border bg-background/85 backdrop-blur-md'
           : 'border-b border-transparent bg-transparent'
-      }`}
+      } ${scrolled ? '' : 'text-white'}`}
     >
        <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8">
         <a href="#home" aria-label="Rutha Credit Solutions home" className="flex items-center overflow-hidden">
@@ -42,7 +42,7 @@ export function Navbar() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-foreground/80 transition-colors hover:text-brand"
+              className={`text-sm font-medium transition-colors hover:text-brand ${scrolled ? 'text-foreground/80' : 'text-white/80'}`}
             >
               {link.label}
             </a>
@@ -63,7 +63,7 @@ export function Navbar() {
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-label="Toggle menu"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-foreground md:hidden"
+          className={`inline-flex h-10 w-10 items-center justify-center rounded-lg md:hidden ${scrolled ? 'text-foreground' : 'text-white'}`}
         >
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
