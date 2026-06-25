@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { ArrowRight, ShieldCheck, Clock, Sparkles } from 'lucide-react'
+import { AuthLink } from '../auth-link'
 
 const easing = [0.22, 1, 0.36, 1] as const
 
@@ -59,13 +60,12 @@ export function Hero() {
             transition={{ duration: 0.6, ease: easing, delay: 0.24 }}
             className="mt-8 flex flex-col gap-3 sm:flex-row"
           >
-            <a
-              href="#contact"
+            <AuthLink
               className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-brand shadow-lg shadow-black/20 transition-transform hover:scale-[1.03]"
             >
               Apply for a loan
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </a>
+            </AuthLink>
             <a
               href="#services"
               className="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 bg-white/10 px-7 py-3.5 text-sm font-semibold text-white transition-colors hover:border-white hover:bg-white/20"

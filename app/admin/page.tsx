@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react'
 import { AdminAuthGuard } from '@/components/admin/auth-guard'
 import { supabase } from '@/lib/supabase'
-import { ClipboardList, Landmark, Wallet, AlertTriangle, Loader2 } from 'lucide-react'
+import { ClipboardList, Landmark, Wallet, AlertTriangle } from 'lucide-react'
+import { LoadingStats } from '@/components/ui/loading'
 import type { DashboardMetrics } from '@/lib/types'
 
 export default function AdminDashboard() {
@@ -47,8 +48,16 @@ export default function AdminDashboard() {
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-[#6D28D9]" />
+          <div className="space-y-6">
+            <LoadingStats count={4} />
+            <div className="grid gap-4 sm:grid-cols-2">
+              {Array.from({ length: 2 }).map((_, i) => (
+                <div key={i} className="rounded-xl border border-[#1F2937] bg-[#111827] p-6">
+                  <div className="h-4 w-32 animate-pulse rounded bg-gray-700 mb-2" />
+                  <div className="h-8 w-24 animate-pulse rounded bg-gray-700" />
+                </div>
+              ))}
+            </div>
           </div>
         ) : metrics ? (
           <>

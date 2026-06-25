@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useScroll, useMotionValueEvent } from 'framer-
 import { Menu, X, Phone } from 'lucide-react'
 import { useState } from 'react'
 import { Logo } from './logo'
+import { AuthLink } from '../auth-link'
 
 const links = [
   { label: 'About', href: '#about' },
@@ -46,13 +47,12 @@ export function Navbar() {
         </div>
 
         <div className="hidden md:block">
-          <a
-            href="#contact"
+          <AuthLink
             className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-brand-foreground shadow-sm transition-transform hover:scale-[1.03]"
           >
             <Phone className="h-4 w-4" />
             Apply Now
-          </a>
+          </AuthLink>
         </div>
 
         <button
@@ -85,14 +85,13 @@ export function Navbar() {
                   {link.label}
                 </a>
               ))}
-              <a
-                href="#contact"
+              <AuthLink
                 onClick={() => setOpen(false)}
                 className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-brand-foreground"
               >
                 <Phone className="h-4 w-4" />
                 Apply Now
-              </a>
+              </AuthLink>
             </div>
           </motion.div>
         )}

@@ -1,22 +1,21 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import { Sidebar } from './sidebar'
+import { PortalSidebar } from '@/components/portal/sidebar'
 import type { Profile } from '@/lib/types'
 import { LoadingSpinner } from '@/components/ui/loading'
+import { X } from 'lucide-react'
 
-type AuthGuardProps = {
+export default function DashboardLayout({
+  children,
+}: {
   children: React.ReactNode
-  allowedRoles?: ('admin' | 'loan_ops')[]
-}
-
-export function AdminAuthGuard({ children, allowedRoles }: AuthGuardProps) {
+}) {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const router = useRouter()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
     let mounted = true
@@ -29,7 +28,7 @@ export function AdminAuthGuard({ children, allowedRoles }: AuthGuardProps) {
         const { data: { session } } = await supabase.auth.getSession()
         if (!session) {
           if (mounted) {
-            router.push('/auth')
+            window.location.href = '/auth'
           }
           return
         }
@@ -72,26 +71,13 @@ export function AdminAuthGuard({ children, allowedRoles }: AuthGuardProps) {
         if (!profileData && profileError) {
           console.error('Profile fetch failed:', profileError)
           setError('Failed to load profile data. Some features may be limited.')
-          // Still allow access - session is valid
           setLoading(false)
           return
         }
 
         if (!profileData) {
-          // No profile but session exists - create minimal profile state
           setError('Profile not found. Please contact support.')
           setLoading(false)
-          return
-        }
-
-        // Check role
-        if (profileData.role === 'client') {
-          router.push('/portal')
-          return
-        }
-
-        if (allowedRoles && !allowedRoles.includes(profileData.role)) {
-          router.push('/admin')
           return
         }
 
@@ -99,7 +85,7 @@ export function AdminAuthGuard({ children, allowedRoles }: AuthGuardProps) {
         setLoading(false)
       } catch (err) {
         if (!mounted) return
-        console.error('Auth guard error:', err)
+        console.error('Dashboard layout error:', err)
         setError('Authentication error occurred')
         setLoading(false)
       }
@@ -110,7 +96,7 @@ export function AdminAuthGuard({ children, allowedRoles }: AuthGuardProps) {
     return () => {
       mounted = false
     }
-  }, [router, allowedRoles])
+  }, [])
 
   if (loading) {
     return (
@@ -140,9 +126,17 @@ export function AdminAuthGuard({ children, allowedRoles }: AuthGuardProps) {
 
   return (
     <div className="flex min-h-screen bg-[#0B0F1A]">
-      <Sidebar role={profile.role} />
+      <PortalSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <main className="flex-1 overflow-auto">
-        <div className="p-6 lg:p-8">{children}</div>
+        <div className="lg:hidden fixed top-4 left-4 z-40">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="rounded-lg bg-[#111827] p-2 text-[#9CA3AF] hover:text-[#F9FAFB]"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        {children}
       </main>
     </div>
   )

@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react'
 import { AdminAuthGuard } from '@/components/admin/auth-guard'
 import { supabase } from '@/lib/supabase'
 import { createAuditLog, getCurrentProfile } from '@/lib/auth'
-import { Search, Loader2, Eye, Edit } from 'lucide-react'
+import { Search, Eye, Edit } from 'lucide-react'
+import { LoadingTable } from '@/components/ui/loading'
 import type { Loan, Profile } from '@/lib/types'
 
 export default function LoansPage() {
@@ -84,8 +85,15 @@ export default function LoansPage() {
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-[#6D28D9]" />
+          <div className="overflow-hidden rounded-xl border border-[#1F2937]">
+            <div className="border-b border-[#1F2937] bg-[#111827] px-4 py-3">
+              <div className="flex gap-4">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div key={i} className="h-3 w-20 animate-pulse rounded bg-gray-700" />
+                ))}
+              </div>
+            </div>
+            <LoadingTable rows={5} />
           </div>
         ) : (
           <div className="overflow-hidden rounded-xl border border-[#1F2937]">
@@ -106,11 +114,11 @@ export default function LoansPage() {
                 {filtered.map((loan) => (
                   <tr key={loan.id} className="border-b border-[#1F2937] hover:bg-[#111827]/50">
                     <td className="px-4 py-3 text-sm text-[#F9FAFB]">{loan.id.slice(0, 8)}...</td>
-                    <td className="px-4 py-3 text-sm text-[#F9FAFB]">ZMW {Number(loan.approved_amount).toLocaleString()}</td>
-                    <td className="px-4 py-3 text-sm text-[#9CA3AF]">{loan.interest_rate}%</td>
-                    <td className="px-4 py-3 text-sm text-[#F9FAFB]">ZMW {Number(loan.total_repayable).toLocaleString()}</td>
-                    <td className="px-4 py-3 text-sm text-[#16A34A]">ZMW {Number(loan.amount_paid).toLocaleString()}</td>
-                    <td className="px-4 py-3 text-sm text-[#9CA3AF]">{new Date(loan.due_date).toLocaleDateString()}</td>
+                  <td className="px-4 py-3 text-sm text-[#F9FAFB]">ZMW {Number(loan.principal).toLocaleString()}</td>
+                  <td className="px-4 py-3 text-sm text-[#9CA3AF]">{loan.interest_rate}%</td>
+                  <td className="px-4 py-3 text-sm text-[#F9FAFB]">ZMW {Number(loan.total_repayable).toLocaleString()}</td>
+                  <td className="px-4 py-3 text-sm text-[#16A34A]">ZMW {Number(loan.total_repayable - loan.remaining_balance).toLocaleString()}</td>
+                  <td className="px-4 py-3 text-sm text-[#9CA3AF]">{loan.disbursed_at ? new Date(loan.disbursed_at).toLocaleDateString() : 'N/A'}</td>
                     <td className="px-4 py-3">
                       <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${statusColors[loan.status]}`}>
                         {loan.status}

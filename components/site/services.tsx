@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { Banknote, Car, Check, ArrowRight } from 'lucide-react'
 import { Reveal } from './reveal'
+import { AuthLink } from '../auth-link'
 
 const services = [
   {
@@ -115,13 +116,12 @@ export function Services() {
                   ))}
                 </ul>
 
-                <a
-                  href="#contact"
+                <AuthLink
                   className="group mt-8 inline-flex items-center gap-2 text-sm font-semibold text-brand"
                 >
                   Apply for this loan
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </a>
+                </AuthLink>
               </motion.div>
             </div>
           ))}

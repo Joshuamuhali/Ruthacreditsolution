@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react'
 import { AdminAuthGuard } from '@/components/admin/auth-guard'
 import { supabase } from '@/lib/supabase'
 import { createAuditLog, getCurrentProfile } from '@/lib/auth'
-import { Search, Loader2, CheckCircle, XCircle, Eye } from 'lucide-react'
+import { Search, CheckCircle, XCircle, Eye, Loader2 } from 'lucide-react'
+import { LoadingTable } from '@/components/ui/loading'
 import type { Application, Profile } from '@/lib/types'
 
 type AppWithProfile = Application & { reviewer_name?: string }
@@ -115,8 +116,15 @@ export default function ApplicationsPage() {
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-[#6D28D9]" />
+          <div className="overflow-hidden rounded-xl border border-[#1F2937]">
+            <div className="border-b border-[#1F2937] bg-[#111827] px-4 py-3">
+              <div className="flex gap-4">
+                {Array.from({ length: 7 }).map((_, i) => (
+                  <div key={i} className="h-3 w-20 animate-pulse rounded bg-gray-700" />
+                ))}
+              </div>
+            </div>
+            <LoadingTable rows={5} />
           </div>
         ) : (
           <div className="overflow-hidden rounded-xl border border-[#1F2937]">

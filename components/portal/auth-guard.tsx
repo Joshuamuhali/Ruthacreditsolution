@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { getCurrentProfile } from '@/lib/auth'
+import { supabase } from '@/lib/supabase'
 import type { Profile } from '@/lib/types'
-import { Loader2, LogOut, Bell, ChevronLeft } from 'lucide-react'
+import { LoadingSpinner } from '@/components/ui/loading'
+import { LogOut } from 'lucide-react'
 
 type PortalAuthGuardProps = {
   children: React.ReactNode
@@ -13,23 +14,118 @@ type PortalAuthGuardProps = {
 export function PortalAuthGuard({ children }: PortalAuthGuardProps) {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
   useEffect(() => {
-    getCurrentProfile().then((p) => {
-      if (!p || p.role !== 'client') {
-        router.push('/auth')
-        return
+    let mounted = true
+    let retryCount = 0
+    const MAX_RETRIES = 2
+
+    async function loadProfile() {
+      try {
+        // First check if session exists
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!session) {
+          if (mounted) {
+            router.push('/auth')
+          }
+          return
+        }
+
+        // Try to fetch profile with retry
+        let profileData: Profile | null = null
+        let profileError: any = null
+
+        while (retryCount < MAX_RETRIES && !profileData) {
+          try {
+            const { data, error } = await supabase
+              .from('profiles')
+              .select('*')
+              .eq('id', session.user.id)
+              .single()
+
+            if (error) {
+              profileError = error
+              retryCount++
+              if (retryCount < MAX_RETRIES) {
+                await new Promise(resolve => setTimeout(resolve, 500))
+                continue
+              }
+            } else {
+              profileData = data
+              break
+            }
+          } catch (err) {
+            profileError = err
+            retryCount++
+            if (retryCount < MAX_RETRIES) {
+              await new Promise(resolve => setTimeout(resolve, 500))
+            }
+          }
+        }
+
+        if (!mounted) return
+
+        // If profile fetch failed but session exists, show error but don't kick out
+        if (!profileData && profileError) {
+          console.error('Profile fetch failed:', profileError)
+          setError('Failed to load profile data. Some features may be limited.')
+          // Still allow access - session is valid
+          setLoading(false)
+          return
+        }
+
+        if (!profileData) {
+          // No profile but session exists - create minimal profile state
+          setError('Profile not found. Please contact support.')
+          setLoading(false)
+          return
+        }
+
+        // Check role - only allow clients
+        if (profileData.role !== 'client') {
+          router.push('/admin')
+          return
+        }
+
+        setProfile(profileData)
+        setLoading(false)
+      } catch (err) {
+        if (!mounted) return
+        console.error('Auth guard error:', err)
+        setError('Authentication error occurred')
+        setLoading(false)
       }
-      setProfile(p)
-      setLoading(false)
-    })
-  }, [])
+    }
+
+    loadProfile()
+
+    return () => {
+      mounted = false
+    }
+  }, [router])
 
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#0B0F1A]">
-        <Loader2 className="h-8 w-8 animate-spin text-[#6D28D9]" />
+        <LoadingSpinner size="lg" />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#0B0F1A]">
+        <div className="max-w-md rounded-xl border border-red-500/30 bg-red-500/10 p-6 text-center">
+          <p className="text-sm text-red-400">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 rounded-lg bg-[#6D28D9] px-4 py-2 text-sm font-medium text-white hover:bg-[#5B21B6]"
+          >
+            Retry
+          </button>
+        </div>
       </div>
     )
   }
